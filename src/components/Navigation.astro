@@ -1,11 +1,12 @@
 ---
-import { FolderKanban, Home, Mail, Menu, Route, X } from "@lucide/astro";
+import { FolderKanban, Home, Mail, Menu, PackageCheck, Route, X } from "@lucide/astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
 import { es } from "@/i18n/es";
 
 const links = [
   { href: "#home", key: "nav.home", label: es.nav.home, Icon: Home },
+  { href: "#services", key: "nav.services", label: es.nav.services, Icon: PackageCheck },
   { href: "#projects", key: "nav.projects", label: es.nav.projects, Icon: FolderKanban },
   { href: "#process", key: "nav.process", label: es.nav.process, Icon: Route },
   { href: "#contact", key: "nav.contact", label: es.nav.contact, Icon: Mail },

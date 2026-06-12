@@ -19,16 +19,27 @@ import { es } from "@/i18n/es";
       <div class="absolute inset-0 bg-[linear-gradient(90deg,var(--color-line)_1px,transparent_1px),linear-gradient(180deg,var(--color-line)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40"></div>
       <div class="relative flex h-full min-h-[372px] flex-col justify-between sm:min-h-[480px]">
         <div class="flex justify-between text-xs uppercase tracking-[0.28em] text-muted">
-          <span>Takumi</span>
+          <span>madebytakumi</span>
           <span>01</span>
         </div>
-        <div class="mx-auto flex items-center gap-8">
-          <div class="h-72 w-px bg-foreground/20"></div>
-          <div class="relative h-80 w-12">
-            <div class="absolute inset-x-1 top-0 h-full rounded-full bg-accent"></div>
-            <div class="absolute inset-x-0 top-12 h-28 rounded-full bg-accent/80 blur-[1px]"></div>
+        <div class="mx-auto flex items-center gap-6 sm:gap-8">
+          <div class="h-64 w-px bg-gradient-to-b from-transparent via-foreground/20 to-transparent sm:h-72"></div>
+          <div class="relative grid size-44 place-items-center rounded-[2.2rem] bg-foreground p-5 shadow-[0_28px_90px_rgba(11,11,11,0.22)] sm:size-56 sm:rounded-[2.8rem] sm:p-7">
+            <div class="absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_35%_20%,rgba(245,245,243,0.13),transparent_42%),linear-gradient(145deg,rgba(245,245,243,0.08),transparent_48%)]"></div>
+            <div class="absolute -inset-5 rounded-[3.5rem] border border-accent/20 opacity-70"></div>
+            <div class="absolute -right-4 top-8 h-24 w-8 rounded-full bg-accent/80 blur-[18px]"></div>
+            <img
+              src="/favicon.svg"
+              alt=""
+              aria-hidden="true"
+              class="relative size-full rounded-[1.55rem] object-contain sm:rounded-[2rem]"
+              width="224"
+              height="224"
+              loading="eager"
+              decoding="async"
+            />
           </div>
-          <div class="h-72 w-px bg-foreground/20"></div>
+          <div class="h-64 w-px bg-gradient-to-b from-transparent via-foreground/20 to-transparent sm:h-72"></div>
         </div>
         <div class="grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
           <p class="max-w-xs text-lg leading-7 tracking-[-0.02em]" data-i18n="hero.visual">{es.hero.visual}</p>

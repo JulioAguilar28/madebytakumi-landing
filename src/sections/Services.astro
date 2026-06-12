@@ -1,0 +1,55 @@
+---
+import { Globe2, ShoppingBag, Workflow } from "@lucide/astro";
+import SectionTitle from "@/components/SectionTitle.astro";
+import { es } from "@/i18n/es";
+
+const icons = [Globe2, ShoppingBag, Workflow];
+const services = es.services.items.map((service, index) => ({ ...service, Icon: icons[index] }));
+---
+
+<section id="services" class="container-shell py-24 sm:py-32">
+  <div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
+    <SectionTitle eyebrowKey="services.eyebrow" titleKey="services.title" eyebrow={es.services.eyebrow} title={es.services.title} />
+    <p class="reveal max-w-xl text-lg leading-8 text-muted lg:justify-self-end">
+      <span data-i18n="services.intro">{es.services.intro}</span>
+    </p>
+  </div>
+
+  <div class="mt-14 grid gap-5 lg:grid-cols-3">
+    {services.map((service, index) => (
+      <article class:list={[
+        "reveal group relative overflow-hidden rounded-[2rem] border hairline bg-surface/70 p-6 shadow-[var(--shadow-soft)] transition duration-500 hover:-translate-y-1 hover:border-accent/55 sm:p-8",
+        index === 1 && "lg:-mt-8",
+      ]}>
+        <div class="absolute right-5 top-5 font-mono text-xs font-semibold tracking-[0.28em] text-accent/45">
+          0{index + 1}
+        </div>
+        <div class="mb-8 grid size-14 place-items-center rounded-2xl border hairline bg-background text-2xl transition duration-500 group-hover:rotate-3 group-hover:border-accent/50 group-hover:text-accent">
+          <service.Icon class="size-6" stroke-width={1.7} aria-hidden="true" />
+        </div>
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-accent" data-i18n={`services.items.${index}.problem`}>
+          {service.problem}
+        </p>
+        <h3 class="text-3xl font-semibold leading-none tracking-[-0.05em]" data-i18n={`services.items.${index}.title`}>
+          {service.title}
+        </h3>
+        <p class="mt-5 text-sm leading-7 text-muted" data-i18n={`services.items.${index}.description`}>
+          {service.description}
+        </p>
+        <div class="mt-7 border-t hairline pt-5">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-muted" data-i18n="services.includes">
+            {es.services.includes}
+          </p>
+          <ul class="grid gap-3 text-sm leading-6 text-foreground">
+            {service.includes.map((item, itemIndex) => (
+              <li class="flex gap-3">
+                <span class="mt-2 size-1.5 shrink-0 rounded-full bg-accent"></span>
+                <span data-i18n={`services.items.${index}.includes.${itemIndex}`}>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

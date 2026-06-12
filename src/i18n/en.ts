@@ -7,6 +7,7 @@ export const en = {
   nav: {
     home: "Home",
     projects: "Projects",
+    services: "Solutions",
     process: "Process",
     contact: "Contact",
     menuLabel: "Menu",
@@ -29,8 +30,7 @@ export const en = {
     title: "Featured projects",
     intro:
       "Work selected to show the range between conversion-focused interfaces, resilient backend architecture and practical AI workflows.",
-    view: "View project",
-    study: "Case study",
+    view: "View website",
     items: [
       {
         title: "Exorno",
@@ -46,6 +46,39 @@ export const en = {
         title: "AI Workflow Demo",
         description: "AI-powered automation for business processes.",
         keywords: ["Automation", "AI", "Productivity", "Integrations"],
+      },
+    ],
+  },
+  services: {
+    eyebrow: "Solutions",
+    title: "Products for businesses ready to move forward",
+    intro:
+      "Not every business needs the same thing. We start with the real problem behind your venture and build a clear, useful solution that is ready to operate.",
+    includes: "We can build",
+    cta: "Request a quote",
+    ctaText:
+      "If you run a local shop, cafe, physical store or small business, tell me what you want to solve and I’ll propose a concrete path to quote.",
+    items: [
+      {
+        problem: "I want people to find and trust my business",
+        title: "Digital presence",
+        description:
+          "We create clear digital spaces to present your brand, products and value proposition without complicating day-to-day operations.",
+        includes: ["Landing pages", "Digital catalogs", "Blogs and foundational content"],
+      },
+      {
+        problem: "I want to sell beyond my physical location",
+        title: "Online sales",
+        description:
+          "We build stores and sales flows for small businesses that need to show products, receive orders and grow with structure.",
+        includes: ["Online stores", "Catalogs with order requests", "Responsive shopping experiences"],
+      },
+      {
+        problem: "I want to save time and improve operations",
+        title: "Maintenance and automation",
+        description:
+          "We improve existing tools, connect processes and reduce repetitive tasks so the business can operate with more clarity.",
+        includes: ["Web maintenance", "Simple automations", "Integrations and continuous improvements"],
       },
     ],
   },
@@ -87,19 +120,19 @@ export const en = {
     projectPlaceholder: "Select an option",
     options: {
       landing: "Landing page",
-      mvp: "MVP application",
-      portal: "Customer portal",
-      internal: "Internal tool",
-      ai: "AI integration",
+      mvp: "Online store",
+      portal: "Digital catalog",
+      internal: "Maintenance or improvement",
+      ai: "Automation",
     },
-    budget: "Estimated budget",
-    budgetPlaceholder: "Select a range",
+    budget: "Project stage",
+    budgetPlaceholder: "Select a stage",
     budgetOptions: {
-      micro: "$100 - $4,500 MXN",
-      starter: "$5,000 - $10,000 MXN",
-      growth: "$10,000 - $20,000 MXN",
-      scale: "$20,000 - $40,000 MXN",
-      premium: "$40,000+ MXN",
+      micro: "I only have an idea",
+      starter: "I already have brand or content",
+      growth: "I already sell and want to improve",
+      scale: "I need to integrate processes",
+      premium: "I need a complete solution",
       unsure: "Not sure yet",
     },
     message: "Message",

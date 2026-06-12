@@ -1,5 +1,5 @@
 ---
-import { ArrowUpRight, FileText } from "@lucide/astro";
+import { ArrowUpRight } from "@lucide/astro";
 
 interface Props {
   index: number;
@@ -30,12 +30,8 @@ const n = String(index + 1).padStart(2, "0");
   </div>
   <div class="mt-10 flex flex-wrap gap-4 text-sm font-medium">
     <a href="#contact" class="inline-flex items-center gap-1.5 text-foreground transition hover:text-accent">
-      <span data-i18n="projects.view">Ver proyecto</span>
+      <span data-i18n="projects.view">Ver sitio web</span>
       <ArrowUpRight class="size-4" stroke-width={1.8} aria-hidden="true" />
-    </a>
-    <a href="#contact" class="inline-flex items-center gap-1.5 text-muted transition hover:text-accent">
-      <span data-i18n="projects.study">Caso de estudio</span>
-      <FileText class="size-4" stroke-width={1.8} aria-hidden="true" />
     </a>
   </div>
 </article>
