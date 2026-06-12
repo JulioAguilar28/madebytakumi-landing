@@ -1,0 +1,22 @@
+---
+import ProjectCard from "@/components/ProjectCard.astro";
+import SectionTitle from "@/components/SectionTitle.astro";
+import { getProjects } from "@/data/projects";
+import { es } from "@/i18n/es";
+
+const projects = getProjects("es");
+---
+
+<section id="projects" class="border-y hairline bg-surface/35 py-24 sm:py-32">
+  <div class="container-shell">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+      <SectionTitle eyebrowKey="projects.eyebrow" titleKey="projects.title" eyebrow={es.projects.eyebrow} title={es.projects.title} />
+      <p class="reveal max-w-xl text-base leading-8 text-muted lg:justify-self-end">
+        <span data-i18n="projects.intro">{es.projects.intro}</span>
+      </p>
+    </div>
+    <div class="mt-14 grid gap-5 lg:grid-cols-3">
+      {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+    </div>
+  </div>
+</section>

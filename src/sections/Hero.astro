@@ -1,0 +1,44 @@
+---
+import Button from "@/components/Button.astro";
+import { es } from "@/i18n/es";
+---
+
+<section id="home" class="container-shell min-h-dvh pt-24 sm:pt-40">
+  <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+    <div class="reveal">
+      <p class="mb-6 text-xs font-semibold uppercase tracking-[0.32em] text-accent" data-i18n="hero.eyebrow">{es.hero.eyebrow}</p>
+      <h1 class="text-balance whitespace-pre-line text-6xl font-semibold leading-[0.92] tracking-[-0.07em] sm:text-7xl lg:text-8xl" data-i18n="hero.headline">{es.hero.headline}</h1>
+      <p class="mt-8 max-w-2xl text-2xl leading-tight tracking-[-0.035em] text-foreground/90 sm:text-3xl" data-i18n="hero.subheadline">{es.hero.subheadline}</p>
+      <p class="mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg" data-i18n="hero.body">{es.hero.body}</p>
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+        <Button href="#contact" label={es.hero.primary} keyName="hero.primary" />
+        <Button href="#projects" variant="secondary" label={es.hero.secondary} keyName="hero.secondary" />
+      </div>
+    </div>
+    <div class="reveal relative min-h-[420px] overflow-hidden rounded-[2rem] border hairline bg-surface/60 p-6 shadow-[var(--shadow-soft)] sm:min-h-[560px] sm:p-10">
+      <div class="absolute inset-0 bg-[linear-gradient(90deg,var(--color-line)_1px,transparent_1px),linear-gradient(180deg,var(--color-line)_1px,transparent_1px)] bg-[size:48px_48px] opacity-40"></div>
+      <div class="relative flex h-full min-h-[372px] flex-col justify-between sm:min-h-[480px]">
+        <div class="flex justify-between text-xs uppercase tracking-[0.28em] text-muted">
+          <span>Takumi</span>
+          <span>01</span>
+        </div>
+        <div class="mx-auto flex items-center gap-8">
+          <div class="h-72 w-px bg-foreground/20"></div>
+          <div class="relative h-80 w-12">
+            <div class="absolute inset-x-1 top-0 h-full rounded-full bg-accent"></div>
+            <div class="absolute inset-x-0 top-12 h-28 rounded-full bg-accent/80 blur-[1px]"></div>
+          </div>
+          <div class="h-72 w-px bg-foreground/20"></div>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <p class="max-w-xs text-lg leading-7 tracking-[-0.02em]" data-i18n="hero.visual">{es.hero.visual}</p>
+          <div class="flex gap-2">
+            <span class="size-2 rounded-full bg-accent"></span>
+            <span class="size-2 rounded-full bg-foreground/25"></span>
+            <span class="size-2 rounded-full bg-foreground/25"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

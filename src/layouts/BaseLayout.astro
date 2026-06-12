@@ -1,0 +1,257 @@
+---
+import { ArrowUp } from "@lucide/astro";
+import Navigation from "@/components/Navigation.astro";
+import { es } from "@/i18n/es";
+import "@/styles/global.css";
+
+const title = es.meta.title;
+const description = es.meta.description;
+const image = "/og.svg";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0B0B0B" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.toString()} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:site_name" content="madebytakumi" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-atmosphere" aria-hidden="true">
+      <span class="atmosphere-enso atmosphere-enso-one"></span>
+      <span class="atmosphere-enso atmosphere-enso-two"></span>
+      <span class="atmosphere-thread"></span>
+      <span class="atmosphere-pulse atmosphere-pulse-one"></span>
+      <span class="atmosphere-pulse atmosphere-pulse-two"></span>
+    </div>
+    <Navigation />
+    <button
+      type="button"
+      class="back-to-top"
+      data-back-to-top
+      aria-label="Volver arriba"
+    >
+      <ArrowUp class="size-5" stroke-width={1.9} aria-hidden="true" />
+    </button>
+    <slot />
+    <script>
+      import { languages } from "@/i18n";
+      import { animate, inView, stagger } from "motion";
+
+      const dictionary = languages;
+      const get = (source, path) => path.split(".").reduce((value, key) => value?.[key], source);
+      const applyLanguage = (lang) => {
+        const copy = dictionary[lang] || dictionary.es;
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const value = get(copy, node.getAttribute("data-i18n"));
+          if (typeof value === "string") node.textContent = value;
+        });
+        document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
+          const value = get(copy, node.getAttribute("data-i18n-aria"));
+          if (typeof value === "string") node.setAttribute("aria-label", value);
+        });
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
+          const value = get(copy, node.getAttribute("data-i18n-placeholder"));
+          if (typeof value === "string") node.setAttribute("placeholder", value);
+        });
+        document.querySelectorAll("[data-lang-label]").forEach((node) => {
+          node.textContent = lang.toUpperCase();
+        });
+        document.title = copy.meta.title;
+        document.querySelector('meta[name="description"]')?.setAttribute("content", copy.meta.description);
+        document.querySelector('meta[property="og:title"]')?.setAttribute("content", copy.meta.title);
+        document.querySelector('meta[property="og:description"]')?.setAttribute("content", copy.meta.description);
+        document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", copy.meta.title);
+        document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", copy.meta.description);
+        localStorage.setItem("takumi-lang", lang);
+      };
+
+      const storedLang = localStorage.getItem("takumi-lang") || "es";
+      applyLanguage(storedLang);
+
+      document.querySelectorAll("[data-lang-toggle]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const next = document.documentElement.lang === "es" ? "en" : "es";
+          applyLanguage(next);
+        });
+      });
+
+      const header = document.querySelector("[data-site-header]");
+      const setHeader = () => header?.classList.toggle("nav-solid", window.scrollY > 16);
+      setHeader();
+      window.addEventListener("scroll", setHeader, { passive: true });
+
+      const panel = document.querySelector("[data-menu-panel]");
+      const openButton = document.querySelector("[data-menu-open]");
+      const closeButton = document.querySelector("[data-menu-close]");
+      const links = [...document.querySelectorAll(".mobile-menu-link")];
+      const setMenuButton = (isOpen) => {
+        const lang = document.documentElement.lang || "es";
+        const copy = dictionary[lang] || dictionary.es;
+        openButton?.setAttribute("aria-expanded", String(isOpen));
+        openButton?.setAttribute("aria-label", isOpen ? copy.nav.close : copy.nav.menu);
+        openButton?.querySelector(".menu-open-icon")?.classList.toggle("hidden", isOpen);
+        openButton?.querySelector(".menu-close-icon")?.classList.toggle("hidden", !isOpen);
+      };
+      const openMenu = () => {
+        panel?.classList.remove("hidden");
+        panel?.setAttribute("aria-hidden", "false");
+        setMenuButton(true);
+        document.body.style.overflow = "hidden";
+        animate(panel, { opacity: [0, 1] }, { duration: 0.28, easing: "ease-out" });
+        animate(links, { opacity: [0, 1], y: [18, 0] }, { delay: stagger(0.045), duration: 0.45, easing: [0.16, 1, 0.3, 1] });
+        openButton?.focus();
+      };
+      const closeMenu = () => {
+        document.body.style.overflow = "";
+        setMenuButton(false);
+        animate(panel, { opacity: [1, 0] }, { duration: 0.22, easing: "ease-out" }).finished.then(() => {
+          panel?.classList.add("hidden");
+          panel?.setAttribute("aria-hidden", "true");
+        });
+      };
+      openButton?.addEventListener("click", () => {
+        if (panel?.classList.contains("hidden")) openMenu();
+        else closeMenu();
+      });
+      closeButton?.addEventListener("click", closeMenu);
+      links.forEach((link) => link.addEventListener("click", closeMenu));
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && panel && !panel.classList.contains("hidden")) closeMenu();
+      });
+
+      const backToTop = document.querySelector("[data-back-to-top]");
+      const secondSection = document.querySelector("#projects");
+      const setBackToTop = () => {
+        if (!backToTop || !secondSection) return;
+        const showAt = secondSection.offsetTop + secondSection.offsetHeight - 80;
+        backToTop.classList.toggle("is-visible", window.scrollY > showAt);
+      };
+      setBackToTop();
+      window.addEventListener("scroll", setBackToTop, { passive: true });
+      window.addEventListener("resize", setBackToTop);
+      backToTop?.addEventListener("click", () => {
+        document.querySelector("#home")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      const customSelects = [...document.querySelectorAll("[data-custom-select]")];
+      const closeSelect = (select) => {
+        const trigger = select.querySelector("[data-select-trigger]");
+        const panel = select.querySelector("[data-select-panel]");
+        panel?.classList.add("hidden");
+        trigger?.setAttribute("aria-expanded", "false");
+      };
+      const closeOtherSelects = (current) => {
+        customSelects.forEach((select) => {
+          if (select !== current) closeSelect(select);
+        });
+      };
+
+      customSelects.forEach((select) => {
+        const trigger = select.querySelector("[data-select-trigger]");
+        const triggerIcon = trigger?.querySelector("[aria-hidden='true']");
+        const panel = select.querySelector("[data-select-panel]");
+        const label = select.querySelector("[data-select-label]");
+        const input = select.querySelector("[data-select-input]");
+        const options = [...select.querySelectorAll("[data-select-option]")];
+
+        const openSelect = () => {
+          closeOtherSelects(select);
+          panel?.classList.remove("hidden");
+          trigger?.setAttribute("aria-expanded", "true");
+          triggerIcon?.classList.add("rotate-180");
+          animate(panel, { opacity: [0, 1], y: [-6, 0], scale: [0.98, 1] }, { duration: 0.22, easing: "ease-out" });
+        };
+        const closeCurrentSelect = () => {
+          closeSelect(select);
+          triggerIcon?.classList.remove("rotate-180");
+        };
+        const chooseOption = (option) => {
+          input.value = option.dataset.value || "";
+          label.textContent = option.textContent.trim();
+          trigger?.classList.remove("text-muted");
+          trigger?.classList.add("text-foreground");
+          options.forEach((item) => item.setAttribute("aria-selected", String(item === option)));
+          closeCurrentSelect();
+          trigger?.focus();
+        };
+
+        trigger?.addEventListener("click", () => {
+          const isOpen = trigger.getAttribute("aria-expanded") === "true";
+          if (isOpen) closeCurrentSelect();
+          else openSelect();
+        });
+        trigger?.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openSelect();
+            options[0]?.focus();
+          }
+        });
+        options.forEach((option, index) => {
+          option.addEventListener("click", () => chooseOption(option));
+          option.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+              options[index + 1]?.focus();
+            }
+            if (event.key === "ArrowUp") {
+              event.preventDefault();
+              (options[index - 1] || trigger)?.focus();
+            }
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              chooseOption(option);
+            }
+            if (event.key === "Escape") {
+              closeCurrentSelect();
+              trigger?.focus();
+            }
+          });
+        });
+      });
+
+      document.addEventListener("click", (event) => {
+        customSelects.forEach((select) => {
+          if (!select.contains(event.target)) closeSelect(select);
+        });
+      });
+
+      document.querySelector("[data-contact-form]")?.addEventListener("submit", (event) => {
+        const missingSelect = customSelects.find((select) => {
+          const input = select.querySelector("[data-select-input]");
+          return !input?.value;
+        });
+        if (missingSelect) {
+          event.preventDefault();
+          missingSelect.querySelector("[data-select-trigger]")?.focus();
+          missingSelect.querySelector("[data-select-trigger]")?.classList.add("border-accent");
+        }
+      });
+
+      inView(".reveal", ({ target }) => {
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          animate(target, { opacity: [0.001, 1], y: [18, 0] }, { duration: 0.65, easing: [0.16, 1, 0.3, 1] });
+        }
+      }, { margin: "0px 0px -12% 0px" });
+    </script>
+  </body>
+</html>

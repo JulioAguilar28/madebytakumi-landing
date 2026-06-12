@@ -1,0 +1,74 @@
+---
+import { FolderKanban, Home, Mail, Menu, Route, X } from "@lucide/astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import Logo from "./Logo.astro";
+import { es } from "@/i18n/es";
+
+const links = [
+  { href: "#home", key: "nav.home", label: es.nav.home, Icon: Home },
+  { href: "#projects", key: "nav.projects", label: es.nav.projects, Icon: FolderKanban },
+  { href: "#process", key: "nav.process", label: es.nav.process, Icon: Route },
+  { href: "#contact", key: "nav.contact", label: es.nav.contact, Icon: Mail },
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition duration-300" data-site-header>
+  <nav class="container-shell flex h-20 items-center justify-between" aria-label="Primary navigation">
+    <Logo />
+    <div class="hidden items-center gap-8 lg:flex">
+      <div class="flex items-center gap-6 text-sm text-muted">
+        {links.map(({ href, key, label }) => (
+          <a href={href} class="transition hover:text-foreground" data-i18n={key}>{label}</a>
+        ))}
+      </div>
+      <div class="flex items-center gap-3">
+        <LanguageSwitcher />
+      </div>
+    </div>
+    <div class="flex items-center gap-3 lg:hidden">
+      <LanguageSwitcher />
+      <button
+        type="button"
+        class="grid size-10 place-items-center rounded-full border hairline"
+        data-menu-open
+        data-i18n-aria="nav.menu"
+        aria-label="Abrir navegación"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        <Menu class="menu-open-icon size-4" stroke-width={1.8} aria-hidden="true" />
+        <X class="menu-close-icon hidden size-4" stroke-width={1.8} aria-hidden="true" />
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div id="mobile-menu" class="mobile-menu-panel fixed inset-x-0 bottom-0 top-20 z-40 hidden overflow-hidden border-t hairline bg-background/92 backdrop-blur-2xl" data-menu-panel aria-hidden="true">
+  <div class="container-shell relative z-10 flex h-full flex-col pb-6 pt-0">
+    <div>
+      <div class="grid gap-2">
+        {links.map(({ href, key, label, Icon }, index) => (
+          <a
+            href={href}
+            class:list={[
+              "mobile-menu-link group grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 border-b hairline py-3 opacity-0 transition duration-500 hover:text-accent",
+              index === 0 && "pt-4",
+            ]}
+            style={`transition-delay:${index * 45}ms`}
+          >
+            <span class="font-mono text-[0.65rem] tracking-[0.24em] text-muted">0{index + 1}</span>
+            <span class="grid size-9 place-items-center rounded-full border hairline bg-surface/55 text-accent transition duration-300 group-hover:bg-accent group-hover:text-ivory">
+              <Icon class="size-4" stroke-width={1.8} aria-hidden="true" />
+            </span>
+            <span class="text-2xl font-semibold leading-none tracking-[-0.04em]" data-i18n={key}>{label}</span>
+            <span class="h-px w-8 bg-accent/60 transition duration-300 group-hover:w-12"></span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="mt-auto flex items-end justify-between gap-6 border-t hairline pt-4">
+      <p class="max-w-48 text-sm leading-6 text-muted" data-i18n="hero.visual">{es.hero.visual}</p>
+      <p class="font-mono text-xs uppercase tracking-[0.28em] text-accent">Takumi / 01</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  eyebrowKey: string;
+  titleKey: string;
+  eyebrow: string;
+  title: string;
+  align?: "left" | "center";
+}
+
+const { eyebrowKey, titleKey, eyebrow, title, align = "left" } = Astro.props;
+---
+
+<div class={`reveal ${align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-3xl"}`}>
+  <p class="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-accent" data-i18n={eyebrowKey}>{eyebrow}</p>
+  <h2 class="text-balance text-4xl font-semibold tracking-[-0.04em] sm:text-5xl lg:text-6xl" data-i18n={titleKey}>{title}</h2>
+</div>
