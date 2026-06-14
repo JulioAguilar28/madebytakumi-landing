@@ -155,9 +155,11 @@ const image = "/og.svg";
       const customSelects = [...document.querySelectorAll("[data-custom-select]")];
       const closeSelect = (select) => {
         const trigger = select.querySelector("[data-select-trigger]");
+        const icon = select.querySelector("[data-select-icon]");
         const panel = select.querySelector("[data-select-panel]");
         panel?.classList.add("hidden");
         trigger?.setAttribute("aria-expanded", "false");
+        icon?.classList.remove("rotate-180");
       };
       const closeOtherSelects = (current) => {
         customSelects.forEach((select) => {
@@ -167,7 +169,6 @@ const image = "/og.svg";
 
       customSelects.forEach((select) => {
         const trigger = select.querySelector("[data-select-trigger]");
-        const triggerIcon = trigger?.querySelector("[aria-hidden='true']");
         const panel = select.querySelector("[data-select-panel]");
         const label = select.querySelector("[data-select-label]");
         const input = select.querySelector("[data-select-input]");
@@ -177,26 +178,23 @@ const image = "/og.svg";
           closeOtherSelects(select);
           panel?.classList.remove("hidden");
           trigger?.setAttribute("aria-expanded", "true");
-          triggerIcon?.classList.add("rotate-180");
+          select.querySelector("[data-select-icon]")?.classList.add("rotate-180");
           animate(panel, { opacity: [0, 1], y: [-6, 0], scale: [0.98, 1] }, { duration: 0.22, easing: "ease-out" });
-        };
-        const closeCurrentSelect = () => {
-          closeSelect(select);
-          triggerIcon?.classList.remove("rotate-180");
         };
         const chooseOption = (option) => {
           input.value = option.dataset.value || "";
           label.textContent = option.textContent.trim();
-          trigger?.classList.remove("text-muted");
+          label.setAttribute("data-i18n", option.getAttribute("data-i18n") || "");
+          trigger?.classList.remove("text-muted", "border-accent");
           trigger?.classList.add("text-foreground");
           options.forEach((item) => item.setAttribute("aria-selected", String(item === option)));
-          closeCurrentSelect();
+          closeSelect(select);
           trigger?.focus();
         };
 
         trigger?.addEventListener("click", () => {
           const isOpen = trigger.getAttribute("aria-expanded") === "true";
-          if (isOpen) closeCurrentSelect();
+          if (isOpen) closeSelect(select);
           else openSelect();
         });
         trigger?.addEventListener("keydown", (event) => {
@@ -222,7 +220,7 @@ const image = "/og.svg";
               chooseOption(option);
             }
             if (event.key === "Escape") {
-              closeCurrentSelect();
+              closeSelect(select);
               trigger?.focus();
             }
           });
@@ -235,16 +233,55 @@ const image = "/og.svg";
         });
       });
 
-      document.querySelector("[data-contact-form]")?.addEventListener("submit", (event) => {
+      document.querySelector("[data-whatsapp-form]")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        if (!(form instanceof HTMLFormElement) || !form.reportValidity()) return;
+
         const missingSelect = customSelects.find((select) => {
+          if (!form.contains(select)) return false;
           const input = select.querySelector("[data-select-input]");
           return !input?.value;
         });
         if (missingSelect) {
-          event.preventDefault();
-          missingSelect.querySelector("[data-select-trigger]")?.focus();
           missingSelect.querySelector("[data-select-trigger]")?.classList.add("border-accent");
+          missingSelect.querySelector("[data-select-trigger]")?.focus();
+          return;
         }
+
+        const formData = new FormData(form);
+        const lang = document.documentElement.lang || "es";
+        const copy = dictionary[lang] || dictionary.es;
+        const whatsappNumber = form.dataset.whatsappNumber;
+        if (!whatsappNumber) return;
+
+        const getField = (name) => String(formData.get(name) || "").trim();
+        const getSelectedLabel = (name) => {
+          const input = form.elements.namedItem(name);
+          if (!(input instanceof HTMLInputElement)) return "";
+          return input.closest("[data-custom-select]")?.querySelector("[data-select-label]")?.textContent?.trim() || "";
+        };
+
+        const intro =
+          lang === "en"
+            ? "Hi Julio, I want to talk about a project for madebytakumi."
+            : "Hola Julio, quiero hablar sobre un proyecto para madebytakumi.";
+
+        const message = [
+          intro,
+          "",
+          `${copy.cta.company}: ${getField("company")}`,
+          `${copy.cta.name}: ${getField("contact_name")}`,
+          `${copy.cta.phone}: ${getField("phone")}`,
+          `${copy.cta.projectType}: ${getSelectedLabel("project_type")}`,
+          `${copy.cta.budget}: ${getSelectedLabel("project_stage")}`,
+          `${copy.cta.companyAbout}: ${getField("company_about")}`,
+        ].join("\n");
+
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        const opened = window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+        if (!opened) window.location.href = whatsappUrl;
       });
 
       inView(".reveal", ({ target }) => {

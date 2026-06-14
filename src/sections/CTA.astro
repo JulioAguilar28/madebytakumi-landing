@@ -1,155 +1,159 @@
 ---
-import { ChevronDown, MessageCircle, Send } from "@lucide/astro";
+import { ChevronDown, Mail, MessageCircle, Send } from "@lucide/astro";
 import { es } from "@/i18n/es";
 
 const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL ?? "hello@madebytakumi.com";
 const whatsappNumber = import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? "5210000000000";
-const whatsappMessage = encodeURIComponent(
-  "Hola Julio, quiero hablar sobre un proyecto para madebytakumi."
-);
+const emailSubject = encodeURIComponent("Proyecto para madebytakumi");
 ---
 
 <section id="contact" class="container-shell py-24 sm:py-32">
   <div class="reveal grid gap-10 rounded-[2rem] border hairline bg-surface/70 p-6 shadow-[var(--shadow-soft)] sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:p-14">
-    <div class="lg:sticky lg:top-28 lg:self-start">
+    <div>
       <p class="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-accent" data-i18n="cta.eyebrow">{es.cta.eyebrow}</p>
       <h2 class="text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.06em] sm:text-6xl" data-i18n="cta.headline">
         {es.cta.headline}
       </h2>
       <p class="mt-6 max-w-md text-lg leading-8 text-muted" data-i18n="cta.body">{es.cta.body}</p>
-      <div class="mt-8">
-        <a
-          href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
-          target="_blank"
-          rel="noreferrer"
-          class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border hairline bg-background/40 px-6 text-sm font-medium tracking-wide transition duration-300 hover:border-accent hover:text-accent"
-        >
-          <MessageCircle class="size-4" stroke-width={1.8} aria-hidden="true" />
-          <span data-i18n="cta.whatsapp">{es.cta.whatsapp}</span>
-        </a>
-      </div>
       <p class="mt-6 max-w-sm text-xs leading-6 text-muted" data-i18n="cta.note">{es.cta.note}</p>
     </div>
 
-    <form class="grid gap-5" action={`https://formsubmit.co/${contactEmail}`} method="post" data-contact-form>
-      <input type="hidden" name="_subject" value="Nueva solicitud desde madebytakumi" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <div class="grid gap-5 sm:grid-cols-2">
+    <div class="grid gap-5">
+      <form class="grid gap-5" data-whatsapp-form data-whatsapp-number={whatsappNumber}>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="grid gap-2 text-sm font-medium">
+            <span data-i18n="cta.name">{es.cta.name}</span>
+            <input
+              class="min-h-12 rounded-2xl border hairline bg-background px-4 text-base text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
+              name="contact_name"
+              type="text"
+              autocomplete="name"
+              required
+              placeholder={es.cta.namePlaceholder}
+              data-i18n-placeholder="cta.namePlaceholder"
+            />
+          </label>
+          <label class="grid gap-2 text-sm font-medium">
+            <span data-i18n="cta.phone">{es.cta.phone}</span>
+            <input
+              class="min-h-12 rounded-2xl border hairline bg-background px-4 text-base text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              required
+              placeholder={es.cta.phonePlaceholder}
+              data-i18n-placeholder="cta.phonePlaceholder"
+            />
+          </label>
+        </div>
+
         <label class="grid gap-2 text-sm font-medium">
-          <span data-i18n="cta.name">{es.cta.name}</span>
+          <span data-i18n="cta.company">{es.cta.company}</span>
           <input
             class="min-h-12 rounded-2xl border hairline bg-background px-4 text-base text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-            name="name"
+            name="company"
             type="text"
-            autocomplete="name"
+            autocomplete="organization"
             required
-            placeholder={es.cta.namePlaceholder}
-            data-i18n-placeholder="cta.namePlaceholder"
+            placeholder={es.cta.companyPlaceholder}
+            data-i18n-placeholder="cta.companyPlaceholder"
           />
         </label>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div class="grid gap-2 text-sm font-medium">
+            <span data-i18n="cta.projectType">{es.cta.projectType}</span>
+            <div class="relative" data-custom-select>
+              <input type="hidden" name="project_type" data-select-input />
+              <button
+                type="button"
+                class="flex min-h-12 w-full items-center justify-between gap-4 rounded-2xl border hairline bg-background px-4 text-left text-base text-muted outline-none transition duration-300 hover:border-accent focus:border-accent"
+                data-select-trigger
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span data-select-label data-i18n="cta.projectPlaceholder">{es.cta.projectPlaceholder}</span>
+                <span class="grid size-7 shrink-0 place-items-center rounded-full border hairline text-accent transition duration-300" data-select-icon aria-hidden="true">
+                  <ChevronDown class="size-3.5" stroke-width={2} />
+                </span>
+              </button>
+              <div class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 hidden overflow-hidden rounded-2xl border hairline bg-background p-2 shadow-[var(--shadow-soft)]" data-select-panel>
+                <div class="grid gap-1" role="listbox">
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="landing" data-i18n="cta.options.landing">{es.cta.options.landing}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="mvp" data-i18n="cta.options.mvp">{es.cta.options.mvp}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="portal" data-i18n="cta.options.portal">{es.cta.options.portal}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="internal" data-i18n="cta.options.internal">{es.cta.options.internal}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="ai" data-i18n="cta.options.ai">{es.cta.options.ai}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid gap-2 text-sm font-medium">
+            <span data-i18n="cta.budget">{es.cta.budget}</span>
+            <div class="relative" data-custom-select>
+              <input type="hidden" name="project_stage" data-select-input />
+              <button
+                type="button"
+                class="flex min-h-12 w-full items-center justify-between gap-4 rounded-2xl border hairline bg-background px-4 text-left text-base text-muted outline-none transition duration-300 hover:border-accent focus:border-accent"
+                data-select-trigger
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span data-select-label data-i18n="cta.budgetPlaceholder">{es.cta.budgetPlaceholder}</span>
+                <span class="grid size-7 shrink-0 place-items-center rounded-full border hairline text-accent transition duration-300" data-select-icon aria-hidden="true">
+                  <ChevronDown class="size-3.5" stroke-width={2} />
+                </span>
+              </button>
+              <div class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 hidden overflow-hidden rounded-2xl border hairline bg-background p-2 shadow-[var(--shadow-soft)]" data-select-panel>
+                <div class="grid gap-1" role="listbox">
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="micro" data-i18n="cta.budgetOptions.micro">{es.cta.budgetOptions.micro}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="starter" data-i18n="cta.budgetOptions.starter">{es.cta.budgetOptions.starter}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="growth" data-i18n="cta.budgetOptions.growth">{es.cta.budgetOptions.growth}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="scale" data-i18n="cta.budgetOptions.scale">{es.cta.budgetOptions.scale}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="premium" data-i18n="cta.budgetOptions.premium">{es.cta.budgetOptions.premium}</button>
+                  <button type="button" class="custom-option" role="option" data-select-option data-value="unsure" data-i18n="cta.budgetOptions.unsure">{es.cta.budgetOptions.unsure}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <label class="grid gap-2 text-sm font-medium">
-          <span data-i18n="cta.email">{es.cta.email}</span>
-          <input
-            class="min-h-12 rounded-2xl border hairline bg-background px-4 text-base text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-            name="email"
-            type="email"
-            autocomplete="email"
+          <span data-i18n="cta.companyAbout">{es.cta.companyAbout}</span>
+          <textarea
+            class="min-h-36 resize-y rounded-2xl border hairline bg-background px-4 py-3 text-base leading-7 text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
+            name="company_about"
             required
-            placeholder={es.cta.emailPlaceholder}
-            data-i18n-placeholder="cta.emailPlaceholder"
-          />
+            placeholder={es.cta.companyAboutPlaceholder}
+            data-i18n-placeholder="cta.companyAboutPlaceholder"
+          ></textarea>
         </label>
-      </div>
 
-      <label class="grid gap-2 text-sm font-medium">
-        <span data-i18n="cta.company">{es.cta.company}</span>
-        <input
-          class="min-h-12 rounded-2xl border hairline bg-background px-4 text-base text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-          name="company"
-          type="text"
-          autocomplete="organization"
-          placeholder={es.cta.companyPlaceholder}
-          data-i18n-placeholder="cta.companyPlaceholder"
-        />
-      </label>
+        <button
+          type="submit"
+          class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium tracking-wide text-background transition duration-300 hover:bg-accent hover:text-white sm:justify-self-start"
+        >
+          <MessageCircle class="size-4" stroke-width={1.8} aria-hidden="true" />
+          <span data-i18n="cta.whatsapp">{es.cta.whatsapp}</span>
+          <Send class="size-4" stroke-width={1.8} aria-hidden="true" />
+        </button>
+      </form>
 
-      <div class="grid gap-5 sm:grid-cols-2">
-        <div class="grid gap-2 text-sm font-medium">
-          <span data-i18n="cta.projectType">{es.cta.projectType}</span>
-          <div class="relative" data-custom-select>
-            <input type="hidden" name="project_type" required data-select-input />
-            <button
-              type="button"
-              class="flex min-h-12 w-full items-center justify-between gap-4 rounded-2xl border hairline bg-background px-4 text-left text-base text-muted transition duration-300 hover:border-accent focus:border-accent"
-              data-select-trigger
-              aria-haspopup="listbox"
-              aria-expanded="false"
-            >
-              <span data-select-label data-i18n="cta.projectPlaceholder">{es.cta.projectPlaceholder}</span>
-              <span class="grid size-7 shrink-0 place-items-center rounded-full border hairline text-accent transition duration-300" aria-hidden="true">
-                <ChevronDown class="size-3.5" stroke-width={2} />
-              </span>
-            </button>
-            <div class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 hidden overflow-hidden rounded-2xl border hairline bg-background p-2 shadow-[var(--shadow-soft)]" data-select-panel>
-              <div class="grid gap-1" role="listbox">
-                <button type="button" class="custom-option" role="option" data-select-option data-value="landing" data-i18n="cta.options.landing">{es.cta.options.landing}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="mvp" data-i18n="cta.options.mvp">{es.cta.options.mvp}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="portal" data-i18n="cta.options.portal">{es.cta.options.portal}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="internal" data-i18n="cta.options.internal">{es.cta.options.internal}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="ai" data-i18n="cta.options.ai">{es.cta.options.ai}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="grid gap-2 text-sm font-medium">
-          <span data-i18n="cta.budget">{es.cta.budget}</span>
-          <div class="relative" data-custom-select>
-            <input type="hidden" name="project_stage" required data-select-input />
-            <button
-              type="button"
-              class="flex min-h-12 w-full items-center justify-between gap-4 rounded-2xl border hairline bg-background px-4 text-left text-base text-muted transition duration-300 hover:border-accent focus:border-accent"
-              data-select-trigger
-              aria-haspopup="listbox"
-              aria-expanded="false"
-            >
-              <span data-select-label data-i18n="cta.budgetPlaceholder">{es.cta.budgetPlaceholder}</span>
-              <span class="grid size-7 shrink-0 place-items-center rounded-full border hairline text-accent transition duration-300" aria-hidden="true">
-                <ChevronDown class="size-3.5" stroke-width={2} />
-              </span>
-            </button>
-            <div class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 hidden overflow-hidden rounded-2xl border hairline bg-background p-2 shadow-[var(--shadow-soft)]" data-select-panel>
-              <div class="grid gap-1" role="listbox">
-                <button type="button" class="custom-option" role="option" data-select-option data-value="micro" data-i18n="cta.budgetOptions.micro">{es.cta.budgetOptions.micro}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="starter" data-i18n="cta.budgetOptions.starter">{es.cta.budgetOptions.starter}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="growth" data-i18n="cta.budgetOptions.growth">{es.cta.budgetOptions.growth}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="scale" data-i18n="cta.budgetOptions.scale">{es.cta.budgetOptions.scale}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="premium" data-i18n="cta.budgetOptions.premium">{es.cta.budgetOptions.premium}</button>
-                <button type="button" class="custom-option" role="option" data-select-option data-value="unsure" data-i18n="cta.budgetOptions.unsure">{es.cta.budgetOptions.unsure}</button>
-              </div>
-            </div>
-          </div>
+      <div class="grid gap-4 rounded-[1.5rem] border hairline bg-background/45 p-5 sm:grid-cols-[auto_1fr] sm:items-center sm:p-6">
+        <span class="grid size-12 place-items-center rounded-2xl border hairline text-accent">
+          <Mail class="size-5" stroke-width={1.8} aria-hidden="true" />
+        </span>
+        <div>
+          <p class="text-sm font-medium text-foreground" data-i18n="cta.emailLabel">{es.cta.emailLabel}</p>
+          <a
+            href={`mailto:${contactEmail}?subject=${emailSubject}`}
+            class="mt-1 inline-flex text-sm text-muted transition hover:text-accent"
+          >
+            {contactEmail}
+          </a>
+          <p class="mt-3 text-xs leading-6 text-muted" data-i18n="cta.emailNote">{es.cta.emailNote}</p>
         </div>
       </div>
-
-      <label class="grid gap-2 text-sm font-medium">
-        <span data-i18n="cta.message">{es.cta.message}</span>
-        <textarea
-          class="min-h-36 resize-y rounded-2xl border hairline bg-background px-4 py-3 text-base leading-7 text-foreground outline-none transition placeholder:text-muted/70 focus:border-accent"
-          name="message"
-          required
-          placeholder={es.cta.messagePlaceholder}
-          data-i18n-placeholder="cta.messagePlaceholder"
-        ></textarea>
-      </label>
-
-      <button
-        type="submit"
-        class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium tracking-wide text-background transition duration-300 hover:bg-accent hover:text-white sm:justify-self-start"
-      >
-        <span data-i18n="cta.submit">{es.cta.submit}</span>
-        <Send class="size-4" stroke-width={1.8} aria-hidden="true" />
-      </button>
-    </form>
+    </div>
   </div>
 </section>

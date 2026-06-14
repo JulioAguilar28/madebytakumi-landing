@@ -3,6 +3,7 @@ import Logo from "@/components/Logo.astro";
 import { es } from "@/i18n/es";
 
 const year = new Date().getFullYear();
+const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL ?? "hello@madebytakumi.com";
 ---
 
 <footer class="border-t hairline py-10">
@@ -15,7 +16,7 @@ const year = new Date().getFullYear();
     <div class="grid gap-6 text-sm text-muted sm:flex sm:items-center">
       <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" class="transition hover:text-accent" data-i18n="footer.linkedin">LinkedIn</a>
       <a href="https://github.com" target="_blank" rel="noreferrer" class="transition hover:text-accent" data-i18n="footer.github">GitHub</a>
-      <a href="mailto:hello@madebytakumi.com" class="transition hover:text-accent" data-i18n="footer.email">Email</a>
+      <a href={`mailto:${contactEmail}`} class="transition hover:text-accent" data-i18n="footer.email">Email</a>
       <span>© {year} <span data-i18n="footer.rights">{es.footer.rights}</span></span>
     </div>
   </div>
